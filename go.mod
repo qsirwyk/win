@@ -1,4 +1,4 @@
-module github.com/lxn/win
+module github.com/qsirwyk/win
 
 go 1.12
 
