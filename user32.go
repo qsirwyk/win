@@ -1900,6 +1900,7 @@ var (
 	updateWindow                *windows.LazyProc
 	windowFromDC                *windows.LazyProc
 	windowFromPoint             *windows.LazyProc
+	getAsyncKeyState            *windows.LazyProc
 )
 
 func init() {
@@ -2062,6 +2063,7 @@ func init() {
 	updateWindow = libuser32.NewProc("UpdateWindow")
 	windowFromDC = libuser32.NewProc("WindowFromDC")
 	windowFromPoint = libuser32.NewProc("WindowFromPoint")
+	getAsyncKeyState = libuser32.NewProc("GetAsyncKeyState")
 }
 
 func AddClipboardFormatListener(hwnd HWND) bool {
@@ -3531,4 +3533,9 @@ func WindowFromPoint(Point POINT) HWND {
 		0)
 
 	return HWND(ret)
+}
+
+func GetAsyncKeyState(vKey int) bool {
+	ret, _, _ := syscall.SyscallN(getAsyncKeyState.Addr(), uintptr(vKey))
+	return int(ret)&0x8000 == 0x8000
 }
